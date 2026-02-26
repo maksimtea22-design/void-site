@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>V O I D — магазин ничего в стиле Apple</title>
+  <title>V O I D — капча-игра</title>
   <!-- Шрифт Inter и иконки Font Awesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     /* ===== БАЗОВЫЙ СБРОС И ПЕРЕМЕННЫЕ ===== */
@@ -718,6 +718,193 @@
       font-size: 14px;
     }
 
+    /* ===== МОДАЛКА РЕГИСТРАЦИИ (С МИНИ-ИГРОЙ) ===== */
+    .modal-reg {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-reg.active {
+      display: flex;
+    }
+
+    .modal-reg-content {
+      background: #ffffff;
+      max-width: 500px;
+      width: 90%;
+      padding: 40px 32px;
+      border-radius: 48px;
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.2);
+      animation: modalPop 0.3s;
+    }
+
+    .modal-reg h2 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .modal-reg p {
+      color: #6e6e73;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: #1d1d1f;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1px solid #d2d2d7;
+      border-radius: 28px;
+      font-size: 16px;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .form-group input:focus {
+      border-color: #0071e3;
+    }
+
+    /* Мини-игра (пазл из букв) */
+    .game-container {
+      background: #f5f5f7;
+      border-radius: 28px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .game-title {
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #1d1d1f;
+    }
+
+    .letters-pool {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+      min-height: 60px;
+      background: #ffffff;
+      border-radius: 40px;
+      padding: 15px;
+    }
+
+    .letter-tile {
+      width: 50px;
+      height: 50px;
+      background: #0071e3;
+      color: white;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 4px 10px rgba(0, 113, 227, 0.3);
+    }
+
+    .letter-tile:active {
+      transform: scale(0.95);
+    }
+
+    .answer-slots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      background: #ffffff;
+      border-radius: 40px;
+      padding: 15px;
+      min-height: 80px;
+    }
+
+    .slot {
+      width: 50px;
+      height: 50px;
+      border: 2px dashed #0071e3;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: #1d1d1f;
+      background: #f0f7ff;
+    }
+
+    .slot.filled {
+      border: 2px solid #0071e3;
+      background: #e1f0ff;
+    }
+
+    .game-message {
+      font-size: 14px;
+      margin-top: 16px;
+      color: #6e6e73;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: #0071e3;
+      color: white;
+      border: none;
+      padding: 14px 0;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:disabled {
+      background: #a0c8f0;
+      cursor: not-allowed;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #0077ed;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #0071e3;
+      border: 2px solid #0071e3;
+      padding: 12px 0;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 12px;
+    }
+
+    .btn-secondary:hover {
+      background: #f0f7ff;
+    }
+
     /* ===== МОДАЛКА С voI'D ===== */
     .modal {
       display: none;
@@ -743,11 +930,6 @@
       text-align: center;
       box-shadow: 0 40px 80px rgba(0, 0, 0, 0.2);
       animation: modalPop 0.3s;
-    }
-
-    @keyframes modalPop {
-      0% { opacity: 0; transform: scale(0.9); }
-      100% { opacity: 1; transform: scale(1); }
     }
 
     .modal-emoji {
@@ -867,7 +1049,7 @@
   </header>
 
   <main>
-    <!-- Герой с 3D-кубом (исправлен: увеличен, центрирован, добавлена тень) -->
+    <!-- Герой с 3D-кубом -->
     <section class="hero">
       <div class="container">
         <div class="logo-3d">
@@ -882,7 +1064,7 @@
         </div>
         <span class="hero__badge"><i class="far fa-star"></i> абсолютная пустота</span>
         <h1 class="hero__title">Купи ничего.<br>Обрети voI'D.</h1>
-        <p class="hero__subtitle">Единственный товар, который действительно ничего не стоит. Каждому покупателю — уникальный voI'D.</p>
+        <p class="hero__subtitle">Единственный товар, который действительно ничего не стоит. Каждому покупателю — уникальный voI'D и именной сертификат.</p>
         <button class="hero__cta" id="buyNothingBtn"><i class="fas fa-spinner"></i> Приобрести пустоту</button>
       </div>
     </section>
@@ -983,13 +1165,13 @@
           </div>
           <div class="step reveal reveal-1">
             <div class="step-icon"><i class="fas fa-credit-card"></i></div>
-            <h3>2. Оплатите</h3>
-            <p>Сумма $0.00 — можно ничего не платить.</p>
+            <h3>2. Зарегистрируйтесь</h3>
+            <p>Укажите ФИО, телефон и соберите слово "ПУСТОТА".</p>
           </div>
           <div class="step reveal reveal-2">
             <div class="step-icon"><i class="fas fa-box-open"></i></div>
             <h3>3. Получите</h3>
-            <p>Ничто и ваш уникальный voI'D придут мгновенно.</p>
+            <p>Ничто, ваш voI'D и сертификат придут мгновенно.</p>
           </div>
         </div>
       </div>
@@ -1002,7 +1184,7 @@
         <p class="section-desc reveal reveal-1">Тысячи счастливых обладателей пустоты.</p>
         <div class="testimonials-grid">
           <div class="testimonial-card reveal">
-            <div class="testimonial-text">«Купил базовый вакуум. До сих пор ничего не получил — идеально! Мой voI'D: 382491.»</div>
+            <div class="testimonial-text">«Купил базовый вакуум. До сих пор ничего не получил — идеально! Мой voI'D: 382491, и сертификат уже сохранился на диск.»</div>
             <div class="testimonial-author">
               <div class="author-avatar">А</div>
               <div class="author-info">
@@ -1012,7 +1194,7 @@
             </div>
           </div>
           <div class="testimonial-card reveal reveal-1">
-            <div class="testimonial-text">«Премиум‑ничто превзошло ожидания. voI'D: 920374 — звучит как код от сейфа с пустотой.»</div>
+            <div class="testimonial-text">«Премиум‑ничто превзошло ожидания. voI'D: 920374 — сертификат скачался автоматически, очень удобно.»</div>
             <div class="testimonial-author">
               <div class="author-avatar">Е</div>
               <div class="author-info">
@@ -1022,7 +1204,7 @@
             </div>
           </div>
           <div class="testimonial-card reveal reveal-2">
-            <div class="testimonial-text">«Подписка на ничто — лучшее решение. Каждый месяц новый voI'D!»</div>
+            <div class="testimonial-text">«Подписка на ничто — лучшее решение. Каждый месяц новый voI'D и свежий сертификат!»</div>
             <div class="testimonial-author">
               <div class="author-avatar">Д</div>
               <div class="author-info">
@@ -1053,14 +1235,14 @@
               <span>Что я получу после покупки?</span>
               <i class="fas fa-chevron-down"></i>
             </div>
-            <div class="faq-answer">Вы получите абсолютно ничего и персональный voI'D. Вам на почту придёт письмо с подтверждением пустоты и вашим кодом.</div>
+            <div class="faq-answer">Вы получите абсолютно ничего, персональный voI'D и автоматически скачается сертификат, подтверждающий ваше владение пустотой.</div>
           </div>
           <div class="faq-item">
             <div class="faq-question">
               <span>Можно ли вернуть ничего?</span>
               <i class="fas fa-chevron-down"></i>
             </div>
-            <div class="faq-answer">Возврат невозможен, потому что вернуть ничего — всё равно что оставить себе. Но voI'D останется с вами навсегда.</div>
+            <div class="faq-answer">Возврат невозможен, потому что вернуть ничего — всё равно что оставить себе. Но voI'D и сертификат останутся с вами навсегда.</div>
           </div>
         </div>
       </div>
@@ -1085,7 +1267,7 @@
       <div class="footer__main">
         <div class="footer-col">
           <div class="logo"><i class="fas fa-circle-notch"></i> VOID</div>
-          <p>Магазин ничего с 2025 года. Каждому покупателю — уникальный voI'D.</p>
+          <p>Магазин ничего с 2025 года. Каждому покупателю — уникальный voI'D и сертификат.</p>
           <div class="social-icons">
             <a href="#"><i class="fab fa-twitter"></i></a>
             <a href="#"><i class="fab fa-instagram"></i></a>
@@ -1116,6 +1298,34 @@
     </div>
   </footer>
 
+  <!-- Модалка регистрации с мини-игрой -->
+  <div class="modal-reg" id="regModal">
+    <div class="modal-reg-content">
+      <h2>Оформление пустоты</h2>
+      <p>Заполните данные и соберите слово</p>
+      
+      <div class="form-group">
+        <label>ФИО</label>
+        <input type="text" id="fio" placeholder="Иванов Иван Иванович">
+      </div>
+      <div class="form-group">
+        <label>Телефон</label>
+        <input type="tel" id="phone" placeholder="+7 999 123-45-67">
+      </div>
+      
+      <!-- Мини-игра: перетаскивание букв (кликом) -->
+      <div class="game-container">
+        <div class="game-title">Соберите слово «ПУСТОТА»</div>
+        <div class="letters-pool" id="lettersPool"></div>
+        <div class="answer-slots" id="answerSlots"></div>
+        <div class="game-message" id="gameMessage">Нажимайте на буквы, чтобы переместить их в ячейки. Соберите слово по порядку.</div>
+      </div>
+
+      <button class="btn-primary" id="submitRegBtn" disabled>Подтвердить и получить</button>
+      <button class="btn-secondary" id="cancelRegBtn">Отмена</button>
+    </div>
+  </div>
+
   <!-- Модалка с voI'D -->
   <div class="modal" id="thanksModal">
     <div class="modal-content">
@@ -1138,40 +1348,246 @@
         });
       }
 
-      // Модалка
-      const modal = document.getElementById('thanksModal');
+      // Элементы модалок
+      const regModal = document.getElementById('regModal');
+      const thanksModal = document.getElementById('thanksModal');
+      const fioInput = document.getElementById('fio');
+      const phoneInput = document.getElementById('phone');
+      const submitRegBtn = document.getElementById('submitRegBtn');
+      const cancelRegBtn = document.getElementById('cancelRegBtn');
       const modalProductSpan = document.getElementById('modalProductName');
       const modalVoidSpan = document.getElementById('modalVoidId');
-      const closeBtn = document.getElementById('closeModal');
+      const closeModalBtn = document.getElementById('closeModal');
 
+      // Элементы игры
+      const lettersPool = document.getElementById('lettersPool');
+      const answerSlots = document.getElementById('answerSlots');
+      const gameMessage = document.getElementById('gameMessage');
+
+      let currentProduct = '';
+      let targetWord = 'ПУСТОТА'; // слово, которое нужно собрать
+      let letters = targetWord.split(''); // массив букв
+      let shuffledLetters = []; // перемешанные
+      let currentAnswer = new Array(targetWord.length).fill(null); // заполненные буквы (null или буква)
+
+      // Перемешивание массива
+      function shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+      }
+
+      // Инициализация игры (перемешиваем и создаём ячейки)
+      function initGame() {
+        shuffledLetters = shuffleArray([...letters]);
+        renderGame();
+      }
+
+      // Отрисовка игры
+      function renderGame() {
+        // Отрисовка пула букв
+        lettersPool.innerHTML = '';
+        shuffledLetters.forEach((letter, index) => {
+          const tile = document.createElement('div');
+          tile.className = 'letter-tile';
+          tile.textContent = letter;
+          tile.dataset.index = index;
+          tile.dataset.letter = letter;
+          tile.addEventListener('click', onTileClick);
+          lettersPool.appendChild(tile);
+        });
+
+        // Отрисовка слотов ответа
+        answerSlots.innerHTML = '';
+        for (let i = 0; i < targetWord.length; i++) {
+          const slot = document.createElement('div');
+          slot.className = 'slot';
+          if (currentAnswer[i] !== null) {
+            slot.textContent = currentAnswer[i];
+            slot.classList.add('filled');
+          }
+          slot.dataset.slotIndex = i;
+          slot.addEventListener('click', onSlotClick);
+          answerSlots.appendChild(slot);
+        }
+
+        // Проверка, собрано ли слово
+        const isComplete = currentAnswer.every((val, idx) => val === targetWord[idx]);
+        submitRegBtn.disabled = !isComplete;
+        if (isComplete) {
+          gameMessage.textContent = '✅ Отлично! Слово собрано.';
+        } else {
+          gameMessage.textContent = 'Нажимайте на буквы, чтобы переместить их в ячейки. Соберите слово по порядку.';
+        }
+      }
+
+      // Обработчик клика на букву в пуле
+      function onTileClick(e) {
+        const tile = e.currentTarget;
+        const letter = tile.dataset.letter;
+        const tileIndex = parseInt(tile.dataset.index);
+
+        // Ищем первый пустой слот
+        const emptySlotIndex = currentAnswer.findIndex(val => val === null);
+        if (emptySlotIndex === -1) return; // нет пустых слотов
+
+        // Помещаем букву в слот
+        currentAnswer[emptySlotIndex] = letter;
+
+        // Удаляем букву из shuffledLetters
+        shuffledLetters.splice(tileIndex, 1);
+
+        renderGame();
+      }
+
+      // Обработчик клика на слот (возврат буквы в пул)
+      function onSlotClick(e) {
+        const slot = e.currentTarget;
+        const slotIndex = parseInt(slot.dataset.slotIndex);
+        const letter = currentAnswer[slotIndex];
+        if (letter === null) return; // слот пуст
+
+        // Возвращаем букву в пул
+        shuffledLetters.push(letter);
+        currentAnswer[slotIndex] = null;
+
+        renderGame();
+      }
+
+      // Генерация voI'D
       function generateVoidId() {
         return Math.floor(100000 + Math.random() * 900000);
       }
 
-      function openModal(productName) {
-        modalProductSpan.textContent = productName;
-        const voidId = generateVoidId();
-        modalVoidSpan.textContent = `voI'D: ${voidId}`;
-        modal.classList.add('active');
+      // Валидация ФИО (только буквы, пробелы, дефисы, минимум 2 слова)
+      function validateFIO(fio) {
+        const trimmed = fio.trim();
+        if (trimmed.length < 5) return false;
+        const regex = /^[a-zA-Zа-яА-ЯёЁ\s\-]+$/;
+        if (!regex.test(trimmed)) return false;
+        const words = trimmed.split(/\s+/).filter(w => w.length > 0);
+        return words.length >= 2;
       }
 
-      closeBtn.addEventListener('click', () => {
-        modal.classList.remove('active');
-      });
+      // Валидация телефона
+      function validatePhone(phone) {
+        const digits = phone.replace(/\D/g, '');
+        if (digits.length === 10) return true;
+        if (digits.length === 11 && (digits[0] === '7' || digits[0] === '8')) return true;
+        return false;
+      }
 
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) modal.classList.remove('active');
-      });
+      // Скачивание сертификата .doc
+      function downloadVoidCertificate(productName, voidId, fio, phone) {
+        const date = new Date().toLocaleDateString('ru-RU', {
+          day: '2-digit', month: '2-digit', year: 'numeric'
+        });
+        const content = `СЕРТИФИКАТ ПУСТОТЫ
 
+Настоящим подтверждается, что
+
+Владелец: ${fio || 'Не указано'}
+
+приобрёл абсолютное ничего:
+
+Товар: ${productName}
+Уникальный идентификатор пустоты (voI'D): ${voidId}
+Дата: ${date}
+Телефон: ${phone || 'Не указан'}
+
+Данный сертификат удостоверяет ваше право на владение ничем.
+Ничто не может быть потеряно, украдено или повреждено.
+Поздравляем с приобретением пустоты!
+
+С уважением,
+VOID Inc.`;
+
+        const blob = new Blob([content], { type: 'application/msword' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `void_certificate_${voidId}.doc`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      // Открыть регистрацию для конкретного товара
+      function openRegistration(product) {
+        currentProduct = product;
+        // Сброс полей
+        fioInput.value = '';
+        phoneInput.value = '';
+        // Сброс игры
+        currentAnswer = new Array(targetWord.length).fill(null);
+        initGame();
+        regModal.classList.add('active');
+      }
+
+      // Закрыть регистрацию
+      function closeRegistration() {
+        regModal.classList.remove('active');
+      }
+
+      // Открыть модалку с voI'D и скачать сертификат
+      function openThanksWithDownload(product, fio, phone) {
+        const voidId = generateVoidId();
+        modalProductSpan.textContent = product;
+        modalVoidSpan.textContent = `voI'D: ${voidId}`;
+        thanksModal.classList.add('active');
+        downloadVoidCertificate(product, voidId, fio, phone);
+      }
+
+      // Обработчики кнопок покупки
       document.getElementById('buyNothingBtn').addEventListener('click', () => {
-        openModal('Абсолютная пустота');
+        openRegistration('Абсолютная пустота');
       });
 
       document.querySelectorAll('.product-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
           const product = e.target.getAttribute('data-product') || 'Нечто';
-          openModal(product);
+          openRegistration(product);
         });
+      });
+
+      // Отмена
+      cancelRegBtn.addEventListener('click', closeRegistration);
+
+      // Подтверждение регистрации
+      submitRegBtn.addEventListener('click', () => {
+        const fio = fioInput.value.trim();
+        const phone = phoneInput.value.trim();
+
+        if (!validateFIO(fio)) {
+          alert('Пожалуйста, введите корректное ФИО (только буквы, минимум имя и фамилия)');
+          return;
+        }
+
+        if (!validatePhone(phone)) {
+          alert('Пожалуйста, введите корректный номер телефона (10 цифр или 11 с 7/8)');
+          return;
+        }
+
+        // Игра уже проверена (кнопка активна только при собранном слове)
+        closeRegistration();
+        openThanksWithDownload(currentProduct, fio, phone);
+      });
+
+      // Закрытие модалки с voI'D
+      closeModalBtn.addEventListener('click', () => {
+        thanksModal.classList.remove('active');
+      });
+
+      thanksModal.addEventListener('click', (e) => {
+        if (e.target === thanksModal) thanksModal.classList.remove('active');
+      });
+
+      // Закрытие регистрации при клике вне
+      regModal.addEventListener('click', (e) => {
+        if (e.target === regModal) closeRegistration();
       });
 
       // FAQ аккордеон
